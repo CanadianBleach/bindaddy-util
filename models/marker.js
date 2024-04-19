@@ -2,6 +2,8 @@ import mongoose, { Schema } from "mongoose";
 
 const bdMarkerSchema = new Schema (
     {
+        title: String,
+        address: String,
         lat: Number,
         long: Number,
         note: String,
@@ -11,7 +13,7 @@ const bdMarkerSchema = new Schema (
     }
 );
 
-const BDMarker = mongoose.model.BDMarker || mongoose.model("BDMarker", bdMarkerSchema);
+const BDMarker = mongoose.models.BDMarker || mongoose.model("BDMarker", bdMarkerSchema);
 
 export default BDMarker;
 
