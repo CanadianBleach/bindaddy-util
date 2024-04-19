@@ -11,7 +11,7 @@ export default function MapViewer(props) {
 
     return (
         <>
-            <MapContainer className="m-3" center={position} zoom={zoom} scrollWheelZoom={false}>
+            <MapContainer className="m-3" center={position} zoom={zoom} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
