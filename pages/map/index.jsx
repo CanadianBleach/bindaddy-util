@@ -20,8 +20,8 @@ const fetchMarkers = async () => {
 
 function MapView() {
     const [markers, setMarkers] = useState({
-        lat: 0,
-        long: 0,
+        lat: 35.5820,
+        long: -80.8140,
         note: "Loading Markers",
         _id: "0"
     });
@@ -49,8 +49,10 @@ function MapView() {
         <>
             <Navbar />
             <div className="is-flex">
-                <MapViewer markers={markers} position={[35.5820, -80.8140]} zoom={13} />
-                <MapSidePanel />
+                <div className="columns">
+                    <MapViewer className="column" markers={markers} position={[35.5820, -80.8140]} zoom={13} />
+                    <MapSidePanel className="column sidebar" />
+                </div>
             </div >
         </>
     )

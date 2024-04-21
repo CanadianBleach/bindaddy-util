@@ -1,13 +1,16 @@
 // src/components/Map.tsx
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
-import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 import { Icon } from "leaflet";
 import MarkerIcon2X from "leaflet/dist/images/marker-icon-2x.png";
 import MarkerIcon from "leaflet/dist/images/marker-icon.png";
 import MarkerShadow from "leaflet/dist/images/marker-shadow.png";
+
+import { useState } from "react";
+import Link from "next/link";
 
 Icon.Default.mergeOptions({
     iconRetinaUrl: MarkerIcon2X.src,
@@ -26,10 +29,12 @@ export default function MapViewer(props) {
             <Marker
                 key={data._id}
                 position={[data.lat, data.long]}
-                eventHandlers={{ click: () => console.log("clicked") }} // also, you can pass your data as a parameter to your clickMarker function
+                eventHandlers={{ click: () => console.log(data._id) }} // also, you can pass your data as a parameter to your clickMarker function
             >
                 <Popup>
-                    {data.note}
+                    <Link href={`/map?_id=${data._id}`}>
+                        <h2 className="">Edit: {data.title}</h2>
+                    </Link>
                 </Popup>
             </Marker>
         ));
