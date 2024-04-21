@@ -5,9 +5,9 @@ import { connectToDataBase } from '@/db/database';
 import BDMarker from '@/models/marker';
 
 export async function POST(request) {
-    const { lat, long, note } = await request.json();
+    const { lat, long, note, title, address } = await request.json();
     await connectToDataBase();
-    await BDMarker.create({ lat, long, note });
+    await BDMarker.create({ lat, long, note, title, address });
     return NextResponse.json({ message: "Marker Created" }, { status: 201 });
 }
 

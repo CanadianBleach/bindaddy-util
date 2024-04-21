@@ -1,5 +1,9 @@
 .leaflet-container {
     height: 90vh;
-    width: 75vw;
+    min-width: 70vw;
     z-index: 0;
-  }
+}
+
+.sidebar {
+  max-width: 25vw;
+}

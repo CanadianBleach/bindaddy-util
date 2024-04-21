@@ -1,10 +1,48 @@
+import { useSearchParams } from 'next/navigation'
+
 // Icons
 import { FaTrash } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
 import { FaPencilAlt } from "react-icons/fa";
+import { useEffect, useState } from 'react';
+
+function editPin () {
+    
+}
 
 function MapSidePanel({ markerId, handleDelete }) {
-    const markerData = [0, 0, "Connor's House", "Where I live."]
+    const [activeMarker, setActiveMarker] = useState({
+        lat: 35.5820,
+        long: -80.8140,
+        note: "Loading Marker Data",
+        title: "Loading Marker Title",
+        address: "Loading Address",
+        _id: "0"
+    });
+
+    const searchParams = useSearchParams()
+    const _id = searchParams.get('_id');
+
+    console.log(_id);
+    console.log(activeMarker);
+
+    useEffect(() => {
+        (async () => {
+            if (_id === null)
+                return;
+
+            const response = await fetch(`/api/markers/${_id}`);
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+
+            const marker = await response.json();
+            console.log(marker.marker);
+            setActiveMarker(marker.marker);
+        })();
+    }, [_id]);
 
     return (
         <>
@@ -12,10 +50,10 @@ function MapSidePanel({ markerId, handleDelete }) {
                 <div>
                     <div>
                         <div className="m-3 title">
-                            {markerData[2]}
+                            {activeMarker.title}
                         </div>
                         <div className="subtitle m-3">
-                            {markerData[0]}, {markerData[1]}
+                            {activeMarker.lat}, {activeMarker.long}
                         </div>
                     </div>
                     <hr className="m-3" />
@@ -24,10 +62,10 @@ function MapSidePanel({ markerId, handleDelete }) {
                             Details
                         </div>
                         <div className="m-3 subtitle">
-                            Id: {markerId}
+                            Id: {_id}
                         </div>
                         <p className="m-3">
-                            Description: {markerData[3]}
+                            Description: {activeMarker.note}
                         </p>
                     </div>
                 </div>
@@ -39,7 +77,7 @@ function MapSidePanel({ markerId, handleDelete }) {
                         </span>
                         <span>Delete</span>
                     </button>
-                    <button className="button m-1 is-warning">
+                    <button onClick={editPin} className="button m-1 is-warning">
                         <span className="icon is-small">
                             <FaPencilAlt />
                         </span>
