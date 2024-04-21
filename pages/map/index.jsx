@@ -19,7 +19,12 @@ const fetchMarkers = async () => {
 }
 
 function MapView() {
-    const [markers, setMarkers] = useState({});
+    const [markers, setMarkers] = useState({
+        lat: 0,
+        long: 0,
+        note: "Loading Markers",
+        _id: "0"
+    });
 
     const MapViewer = useMemo(() => dynamic(
         () => import('@/components/MapViewer'),

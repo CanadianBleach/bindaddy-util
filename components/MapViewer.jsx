@@ -1,29 +1,40 @@
 // src/components/Map.tsx
-import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "leaflet-defaulticon-compatibility";
-import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.css";
-
 import "../css/leaflet.css";
+import { MapContainer, Marker, Popup, TileLayer, Tooltip } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
+
+import { Icon } from "leaflet";
+import MarkerIcon2X from "leaflet/dist/images/marker-icon-2x.png";
+import MarkerIcon from "leaflet/dist/images/marker-icon.png";
+import MarkerShadow from "leaflet/dist/images/marker-shadow.png";
+
+Icon.Default.mergeOptions({
+    iconRetinaUrl: MarkerIcon2X.src,
+    iconUrl: MarkerIcon.src,
+    shadowUrl: MarkerShadow.src,
+});
 
 export default function MapViewer(props) {
     const { position, zoom, markers } = props;
     console.log(markers);
+
     let markerElem = (<Marker position={[0, 0]} />);
 
-    if (markers) {
+    try {
         markerElem = markers.map((data, index) => (
             <Marker
-                key={index}
+                key={data._id}
                 position={[data.lat, data.long]}
-                eventHandlers={{ click: () => handleClick(index) }} // also, you can pass your data as a parameter to your clickMarker function
+                eventHandlers={{ click: () => console.log("clicked") }} // also, you can pass your data as a parameter to your clickMarker function
             >
                 <Popup>
                     {data.note}
                 </Popup>
             </Marker>
         ));
+    } catch (e) {
+        console.log(e);
     }
 
     return (
