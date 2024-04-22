@@ -18,13 +18,27 @@ Icon.Default.mergeOptions({
     shadowUrl: MarkerShadow.src,
 });
 
+function handleClick(event) {
+    console.log("clicked");
+    let coords = event.latlng;
+    let obj = {};
+    obj.lat = coords.lat
+    obj.lng = coords.lng;
+    obj.id = nextId();
+    let locations = this.state.locations;
+    locations.push(obj);
+    this.setState({ ...locations, lat: coords.lat, lng: coords.lng });
+}
+
 export default function MapViewer(props) {
     const { position, zoom, markers } = props;
-    console.log(markers);
 
     let markerElem = (<Marker position={[0, 0]} />);
 
     try {
+        if (markers == null)
+            console.warn("Markers Null")
+
         markerElem = markers.map((data, index) => (
             <Marker
                 key={data._id}
@@ -44,7 +58,7 @@ export default function MapViewer(props) {
 
     return (
         <>
-            <MapContainer className="m-3" center={position} zoom={zoom} scrollWheelZoom={true}>
+            <MapContainer className="m-3" center={position} zoom={zoom} scrollWheelZoom={true} onClick={handleClick}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
