@@ -1,4 +1,5 @@
 import { useSearchParams } from 'next/navigation'
+import { FormEvent } from 'react'
 
 // Icons
 import { FaTrash } from "react-icons/fa6";
@@ -6,24 +7,34 @@ import { FaCheck } from "react-icons/fa";
 import { FaPencilAlt } from "react-icons/fa";
 import { useEffect, useState } from 'react';
 
-function editPin () {
-    
+function editPin() {
+
 }
 
 function MapSidePanel({ markerId, handleDelete }) {
     const [activeMarker, setActiveMarker] = useState({
-        lat: 35.5820,
-        long: -80.8140,
-        note: "Loading Marker Data",
-        title: "Loading Marker Title",
-        address: "Loading Address",
+        lat: 0,
+        long: 0,
+        note: "No Marker Selected",
+        title: "Select a Marker",
+        address: "",
         _id: "0"
     });
 
     const searchParams = useSearchParams()
     const _id = searchParams.get('_id');
 
-    console.log(activeMarker);
+    async function onSubmit(event) {
+        event.preventDefault()
+
+/*         const formData = new FormData(event.currentTarget)
+ */        console.log(event.currentTarge);
+
+        /* const response = await fetch(`/api/markers`, {
+            method: 'PUT',
+            body: formData,
+        }) */
+    }
 
     useEffect(() => {
         (async () => {
@@ -48,9 +59,7 @@ function MapSidePanel({ markerId, handleDelete }) {
             <div className="is-flex is-flex-direction-column is-justify-content-space-between">
                 <div>
                     <div>
-                        <div className="m-3 title">
-                            {activeMarker.title}
-                        </div>
+                        <h2 className='title m-3'>{activeMarker.title}</h2>
                         <div className="subtitle m-3">
                             {activeMarker.lat}, {activeMarker.long}
                         </div>
@@ -60,35 +69,33 @@ function MapSidePanel({ markerId, handleDelete }) {
                         <div className="m-3 subtitle">
                             Details
                         </div>
-                        <div className="m-3 subtitle">
-                            Id: {_id}
-                        </div>
                         <p className="m-3">
-                            Description: {activeMarker.note}
+                            Id: {_id}
                         </p>
+                        <p className='m-3'>{activeMarker.note}</p>
                     </div>
+                    <hr className='m-3' />
+
                 </div>
-                <div className="mb-2">
+                <form className="mb-2">
                     <hr className="m-3" />
-                    <button onClick={handleDelete} className="button m-1 is-danger">
-                        <span className="icon is-small">
-                            <FaTrash />
-                        </span>
-                        <span>Delete</span>
-                    </button>
-                    <button onClick={editPin} className="button m-1 is-warning">
-                        <span className="icon is-small">
-                            <FaPencilAlt />
-                        </span>
-                        <span>Edit</span>
-                    </button>
-                    <button className="button m-1 is-success">
-                        <span className="icon is-small">
-                            <FaCheck />
-                        </span>
-                        <span>Save</span>
-                    </button>
-                </div>
+                    <input className="m-3 input" placeholder={activeMarker.title} />
+                    <textarea className="m-3 textarea" placeholder={activeMarker.note}></textarea>
+                    <div>
+                        <button onClick={handleDelete} className="button m-1 is-danger">
+                            <span className="icon is-small">
+                                <FaTrash />
+                            </span>
+                            <span>Delete</span>
+                        </button>
+                        <button onClick={onSubmit} type='submit' className="button m-1 is-success">
+                            <span className="icon is-small">
+                                <FaCheck />
+                            </span>
+                            <span>Save</span>
+                        </button>
+                    </div>
+                </form>
             </div>
         </>
     )
