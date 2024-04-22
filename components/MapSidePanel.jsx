@@ -23,7 +23,6 @@ function MapSidePanel({ markerId, handleDelete }) {
     const searchParams = useSearchParams()
     const _id = searchParams.get('_id');
 
-    console.log(_id);
     console.log(activeMarker);
 
     useEffect(() => {
