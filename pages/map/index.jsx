@@ -19,6 +19,7 @@ const fetchMarkers = async () => {
 }
 
 function MapView() {
+    // Wrapped as an array so that MapViewer can use the map function
     const [markers, setMarkers] = useState([{
         lat: 35.5820,
         long: -80.8140,
