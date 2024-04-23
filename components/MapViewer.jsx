@@ -36,8 +36,10 @@ export default function MapViewer(props) {
     let markerElem = (<Marker position={[0, 0]} />);
 
     try {
-        if (markers == null)
+        if (markers == null) {
             console.warn("Markers Null")
+        }
+
 
         markerElem = markers.map((data, index) => (
             <Marker
