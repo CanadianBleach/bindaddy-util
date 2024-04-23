@@ -1,10 +1,8 @@
 import { useSearchParams } from 'next/navigation'
-import { FormEvent } from 'react'
 
 // Icons
 import { FaTrash } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
-import { FaPencilAlt } from "react-icons/fa";
 import { useEffect, useState } from 'react';
 
 function editPin() {
@@ -21,22 +19,48 @@ function MapSidePanel({ markerId, handleDelete }) {
         _id: "0"
     });
 
+    const [title, setTitle] = useState("");
+    const [note, setNote] = useState("");
+
+    const handleTitleChange = (e) => {
+        setTitle(e.target.value);
+    };
+
+    const handleNoteChange = (e) => {
+        setNote(e.target.value);
+    };
+
     const searchParams = useSearchParams()
     const _id = searchParams.get('_id');
 
-    async function onSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault()
 
-/*         const formData = new FormData(event.currentTarget)
- */        console.log(event.currentTarge);
+        let formData = {
+            newTitle: title,
+            newNote: note
+        }
 
-        /* const response = await fetch(`/api/markers`, {
+        // Check to see if any changes have been made
+        if (title == "")
+            formData.newTitle = activeMarker.title;
+        if (note == "")
+            formData.newNote = activeMarker.note;
+
+        const response = await fetch(`/api/markers/${_id}`, {
             method: 'PUT',
-            body: formData,
-        }) */
-    }
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
 
-    // Comment
+        const resData = await response.json();
+
+        setActiveMarker(resData.marker);
+        window.location.reload();
+        console.log("PUT RESPONSE", resData);
+    }
 
     useEffect(() => {
         (async () => {
@@ -51,18 +75,21 @@ function MapSidePanel({ markerId, handleDelete }) {
             }
 
             const marker = await response.json();
-            console.log(marker.marker);
+            console.log("MARKER", marker.marker);
             setActiveMarker(marker.marker);
         })();
     }, [_id]);
 
     return (
         <>
-            <div className="is-flex is-flex-direction-column is-justify-content-space-between">
-                <div>
+            <form onSubmit={handleSubmit} className="is-flex form is-flex-direction-column is-justify-content-space-between">
+                <div className=''>
                     <div>
                         <h2 className='title m-3'>{activeMarker.title}</h2>
                         <div className="subtitle m-3">
+                            {activeMarker.address}
+                        </div>
+                        <div className="m-3">
                             {activeMarker.lat}, {activeMarker.long}
                         </div>
                     </div>
@@ -74,31 +101,30 @@ function MapSidePanel({ markerId, handleDelete }) {
                         <p className="m-3">
                             Id: {_id}
                         </p>
-                        <p className='m-3'>{activeMarker.note}</p>
                     </div>
                     <hr className='m-3' />
 
                 </div>
-                <form className="mb-2">
+                <div className="mb-2">
                     <hr className="m-3" />
-                    <input className="m-3 input" placeholder={activeMarker.title} />
-                    <textarea className="m-3 textarea" placeholder={activeMarker.note}></textarea>
+                    <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
+                    <textarea onChange={handleNoteChange} name="note" className="m-3 textarea" placeholder={activeMarker.note}></textarea>
                     <div>
-                        <button onClick={handleDelete} className="button m-1 is-danger">
+                        <button type='submit' className="button m-1 is-danger">
                             <span className="icon is-small">
                                 <FaTrash />
                             </span>
                             <span>Delete</span>
                         </button>
-                        <button onClick={onSubmit} type='submit' className="button m-1 is-success">
+                        <button onClick={handleSubmit} className="button m-1 is-success">
                             <span className="icon is-small">
                                 <FaCheck />
                             </span>
                             <span>Save</span>
                         </button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </>
     )
 }

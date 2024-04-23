@@ -4,10 +4,10 @@ import BDMarker from "@/models/marker";
 
 export async function PUT(request, { params }) {
     const { id } = params;
-    const { newLat: lat, newLong: long, newNote: note, newTitle:title, newAddres:address } = await request.json();
+    const { newNote: note, newTitle: title } = await request.json();
     await connectToDataBase();
-    await BDMarker.findByIdAndUpdate(id, { lat, long, note, title, address });
-    return NextResponse.json({ message: "Marker updated" }, { status: 200 });
+    const marker = await BDMarker.findByIdAndUpdate(id, { note, title });
+    return NextResponse.json({ message:"Marker Updated.", marker: marker }, { status: 200 });
 }
 
 export async function GET(request, { params }) {
