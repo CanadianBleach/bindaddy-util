@@ -6,19 +6,20 @@ import "bulma/css/bulma.min.css";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 
-const fetchMarkers = async () => {
-    const response = await fetch('/api/markers');
 
-    if (!response.ok) {
-        const message = `An error has occured: ${response.status}`;
-        throw new Error(message);
-    }
-
-    const markers = await response.json();
-    return markers;
-}
 
 function MapView() {
+    const fetchMarkers = async () => {
+        const response = await fetch('/api/markers');
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+
+        const markers = await response.json();
+        return markers;
+    }
     // Wrapped as an array so that MapViewer can use the map function
     const [markers, setMarkers] = useState([{
         lat: 35.5820,
