@@ -23,6 +23,7 @@ function MapView() {
         lat: 35.5820,
         long: -80.8140,
         note: "Loading Markers",
+        title: "Loading Marker Title",
         _id: "0"
     });
 

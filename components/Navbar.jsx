@@ -25,7 +25,7 @@ function Navbar() {
                             Home
                         </Link>
 
-                        <Link href="https://github.com/CanadianBleach/bd-util" target="_blank" className="navbar-item">
+                        <Link href="https://github.com/CanadianBleach/bindaddy-util" target="_blank" className="navbar-item">
                             Github
                         </Link>
                         
