@@ -1,7 +1,7 @@
 // src/components/Map.tsx
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
-import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
+import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 import { Icon } from "leaflet";
@@ -18,22 +18,27 @@ Icon.Default.mergeOptions({
     shadowUrl: MarkerShadow.src,
 });
 
-function handleClick(event) {
-    console.log("clicked");
-    let coords = event.latlng;
-    let obj = {};
-    obj.lat = coords.lat
-    obj.lng = coords.lng;
-    obj.id = nextId();
-    let locations = this.state.locations;
-    locations.push(obj);
-    this.setState({ ...locations, lat: coords.lat, lng: coords.lng });
+function CreateMarker() {
+    const [position, setPosition] = useState(null)
+
+    const map = useMapEvents({
+        click(e) {
+            console.log(e);
+            setPosition(e.latlng);
+        },
+    })
+
+    return position === null ? null : (
+        <Marker position={position}>
+          <Popup>You clicked</Popup>
+        </Marker>
+      )
 }
 
 export default function MapViewer(props) {
     const { position, zoom, markers } = props;
 
-    let markerElem = (<Marker position={[0, 0]} />);
+    let markerElem = (<></>);
 
     try {
         if (markers == null) {
@@ -60,17 +65,13 @@ export default function MapViewer(props) {
 
     return (
         <>
-            <MapContainer className="m-3" center={position} zoom={zoom} scrollWheelZoom={true} onClick={handleClick}>
+            <MapContainer className="m-3" center={position} zoom={zoom} scrollWheelZoom={true}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
+                <CreateMarker />
                 <MarkerClusterGroup chunkedLoading>
-                    <Marker position={position}>
-                        <Popup>
-                            Welcome to mooresville!
-                        </Popup>
-                    </Marker>
                     {markerElem}
                 </MarkerClusterGroup>
             </MapContainer>

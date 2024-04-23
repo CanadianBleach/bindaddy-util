@@ -36,6 +36,8 @@ function MapSidePanel({ markerId, handleDelete }) {
         }) */
     }
 
+    // Comment
+
     useEffect(() => {
         (async () => {
             if (_id === null)
