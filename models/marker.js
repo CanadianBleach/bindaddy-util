@@ -3,10 +3,15 @@ import mongoose, { Schema } from "mongoose";
 const bdMarkerSchema = new Schema (
     {
         title: String,
+        note: String,
         address: String,
         lat: Number,
         long: Number,
-        note: String,
+        firstName: String,
+        lastName: String,
+        email: String,
+        active: Boolean,
+
     },
     {
         timestamps: true,

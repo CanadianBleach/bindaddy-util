@@ -41,8 +41,8 @@ function Navbar() {
                                 <Link href="../inactive-sort" className="navbar-item">
                                     Inactive Sort
                                 </Link>
-                                <a className="navbar-item">
-                                    -
+                                <a href="../client-upload" className="navbar-item">
+                                    Client Upload
                                 </a>
                                 <hr className="navbar-divider"></hr>
                                 <a className="navbar-item">

@@ -19,6 +19,7 @@ function MapSidePanel({ markerId, handleDelete }) {
         _id: "0"
     });
 
+    // Form variables
     const [title, setTitle] = useState("");
     const [note, setNote] = useState("");
 
@@ -58,7 +59,7 @@ function MapSidePanel({ markerId, handleDelete }) {
         const resData = await response.json();
 
         setActiveMarker(resData.marker);
-        window.location.reload();
+        //Refresh
         console.log("PUT RESPONSE", resData);
     }
 
@@ -83,9 +84,13 @@ function MapSidePanel({ markerId, handleDelete }) {
     return (
         <>
             <form onSubmit={handleSubmit} className="is-flex form is-flex-direction-column is-justify-content-space-between">
+
+
                 <div className=''>
                     <div>
-                        <h2 className='title m-3'>{activeMarker.title}</h2>
+                        <h2 className='title m-3'>{activeMarker.firstName}, {activeMarker.lastName}</h2>
+                        <p className="m-3">{activeMarker.email}</p>
+                        <hr className='' />
                         <div className="subtitle m-3">
                             {activeMarker.address}
                         </div>
@@ -99,24 +104,31 @@ function MapSidePanel({ markerId, handleDelete }) {
                             Details
                         </div>
                         <p className="m-3">
-                            Id: {_id}
+                            {activeMarker.active}
+                        </p>
+                        <p className="m-3">
+                            Id: {activeMarker._id}
+                        </p>
+                        <p className="m-3">
+                            {activeMarker.note}
                         </p>
                     </div>
-                    <hr className='m-3' />
-
                 </div>
+
+
+
                 <div className="mb-2">
                     <hr className="m-3" />
                     <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
                     <textarea onChange={handleNoteChange} name="note" className="m-3 textarea" placeholder={activeMarker.note}></textarea>
                     <div>
-                        <button type='submit' className="button m-1 is-danger">
+                        <button onClick={handleDelete} className="button m-1 is-danger">
                             <span className="icon is-small">
                                 <FaTrash />
                             </span>
                             <span>Delete</span>
                         </button>
-                        <button onClick={handleSubmit} className="button m-1 is-success">
+                        <button type='submit' className="button m-1 is-success">
                             <span className="icon is-small">
                                 <FaCheck />
                             </span>
@@ -124,7 +136,7 @@ function MapSidePanel({ markerId, handleDelete }) {
                         </button>
                     </div>
                 </div>
-            </form>
+            </form >
         </>
     )
 }

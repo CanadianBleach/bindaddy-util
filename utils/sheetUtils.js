@@ -2,6 +2,56 @@ import * as XLSX from 'xlsx';
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+const uploadServiceData = async (data) => {
+
+    let loopCount = 0;
+
+    // Upload each
+    for (const row in data) {
+        loopCount++;
+        if (loopCount > 12)
+            return;
+
+        const status = (data[row].Status === "Active") ? true : false;
+
+        // Construct URL
+        const addressConverted = data[row].Address.replace(/,/g, "");
+        const url = new URL('https://geocode.maps.co/search');
+        url.searchParams.set('q', addressConverted);
+        url.searchParams.set('api_key', "662969b568730340832191sui76dab1");
+
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+
+        const responseData = await response.json();
+        console.log(responseData);
+
+        const customer = {
+            title: "Marker",
+            note: "Blank note.",
+            address: data[row].Address,
+            lat: responseData[0].lat,
+            long: responseData[0].lon,
+            firstName: data[row].FirstName,
+            lastName: data[row].LastName,
+            email: data[row].Email,
+            active: status,
+        }
+
+        const postResponse = await fetch(`/api/markers/`, {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(customer)
+        });
+    }
+}
+
 const sortSheet = (data) => {
     if (!data)
         return;
@@ -41,7 +91,7 @@ const sortSheet = (data) => {
                     errored.push(inactive[row]);
                 }
             } catch (error) {
-                                console.log("ERROR", error)
+                console.log("ERROR", error)
                 errored.push(inactive[row]);
             }
         }
@@ -98,5 +148,6 @@ const splitToDate = (split) => {
 
 export {
     sortSheet,
+    uploadServiceData
 }
 

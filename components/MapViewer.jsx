@@ -18,7 +18,7 @@ Icon.Default.mergeOptions({
     shadowUrl: MarkerShadow.src,
 });
 
-function CreateMarker() {
+/* function CreateMarker() {
     const [position, setPosition] = useState(null)
 
     const map = useMapEvents({
@@ -33,7 +33,7 @@ function CreateMarker() {
           <Popup>You clicked</Popup>
         </Marker>
       )
-}
+} */
 
 export default function MapViewer(props) {
     const { position, zoom, markers } = props;
@@ -54,7 +54,7 @@ export default function MapViewer(props) {
             >
                 <Popup>
                     <Link href={`/map?_id=${data._id}`}>
-                        <h2 className="">Edit: {data.title}</h2>
+                        <h2 className="">{data.address}</h2>
                     </Link>
                 </Popup>
             </Marker>
@@ -70,7 +70,6 @@ export default function MapViewer(props) {
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <CreateMarker />
                 <MarkerClusterGroup chunkedLoading>
                     {markerElem}
                 </MarkerClusterGroup>

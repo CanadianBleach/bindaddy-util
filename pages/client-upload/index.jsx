@@ -6,14 +6,13 @@ import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
 // Utils
-import { sortSheet } from '@/utils/sheetUtils';
+import { uploadServiceData } from '@/utils/sheetUtils';
 
 // Components
 import SheetViewer from '@/components/SheetViewer';
 import Navbar from '@/components/Navbar';
 
 // Icons
-import { FiDownload } from "react-icons/fi";
 import { FiUpload } from "react-icons/fi";
 
 function InactiveSort() {
@@ -74,7 +73,7 @@ function InactiveSort() {
         <>
             <Navbar />
             <div className="section"></div>
-            <h2 className="title p-3 m-2">Sheets</h2>
+            <h2 className="title p-3 m-2">Upload Service Data</h2>
             {/* form */}
             <form className="form-group custom-form" onSubmit={handleFileSubmit}>
                 <div className="file is-flex is-justify-content-space-between">
@@ -98,11 +97,11 @@ function InactiveSort() {
                         {excelData &&
                             <>
                                 <button className="button m-2" onClick={clearExcelFile}>Clear Sheet</button>
-                                <span onClick={() => sortSheet(excelData)} className="file-cta m-2">
+                                <span onClick={() => uploadServiceData(excelData)} className="file-cta m-2">
                                     <span className="file-icon">
-                                        <FiDownload />
+                                        <FiUpload />
                                     </span>
-                                    <span className="m-2 file-label">Upload Sheet</span>
+                                    <span className="m-2 file-label">Upload Clients</span>
                                 </span>
                             </>}
                     </div>
