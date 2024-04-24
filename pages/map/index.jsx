@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState } from "react";
 
 function MapView() {
     const fetchMarkers = async () => {
+        console.log("fetching markers");
         const response = await fetch('/api/markers');
 
         if (!response.ok) {
