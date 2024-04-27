@@ -1,7 +1,7 @@
 'use client'
 
-import "bulma/css/bulma.min.css";
-
+import { redirect } from "next/navigation";
+import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import * as XLSX from 'xlsx';
 
@@ -17,6 +17,13 @@ import { FiDownload } from "react-icons/fi";
 import { FiUpload } from "react-icons/fi";
 
 function InactiveSort() {
+    const { data: session, status } = useSession()
+
+    if (!session) {
+        redirect("/");
+        return (<></>);
+    }
+
     // onchange states
     const [excelFile, setExcelFile] = useState(null);
     const [typeError, setTypeError] = useState(null);
@@ -28,6 +35,10 @@ function InactiveSort() {
     // Clear file
     const clearExcelFile = () => {
         setExcelFile(null);
+        setFileData(null);
+        setExcelData(null);
+        setTypeError(null);
+
         console.log("Cleared Sheet");
     }
 
@@ -74,7 +85,7 @@ function InactiveSort() {
         <>
             <Navbar />
             <div className="section"></div>
-            <h2 className="title p-3 m-2">Sheets</h2>
+            <h2 className="title p-3 m-2">Find Inactive Clients</h2>
             {/* form */}
             <form className="form-group custom-form" onSubmit={handleFileSubmit}>
                 <div className="file is-flex is-justify-content-space-between">
@@ -102,7 +113,7 @@ function InactiveSort() {
                                     <span className="file-icon">
                                         <FiDownload />
                                     </span>
-                                    <span className="m-2 file-label">Upload Sheet</span>
+                                    <span className="m-2 file-label">Download Sorted</span>
                                 </span>
                             </>}
                     </div>

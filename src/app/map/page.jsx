@@ -2,13 +2,21 @@
 
 import MapSidePanel from "@/components/MapSidePanel";
 import Navbar from "@/components/Navbar";
-import "bulma/css/bulma.min.css";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
 
 
-
 function MapView() {
+    const { data: session, status } = useSession()
+
+    if (!session) {
+        redirect("/");
+        return (<></>);
+    }
+
     const fetchMarkers = async () => {
         console.log("fetching all markers");
         const response = await fetch('/api/markers');
@@ -37,7 +45,7 @@ function MapView() {
     ]);
 
     const MapViewer = useMemo(() => dynamic(
-        () => import('@/components/MapViewer'),
+        () => import('@/components/MapViewer.jsx'),
         {
             loading: () => <p>A map is loading</p>,
             ssr: false

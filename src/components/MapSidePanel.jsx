@@ -5,11 +5,7 @@ import { FaTrash } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
 import { useEffect, useState } from 'react';
 
-function editPin() {
-
-}
-
-function MapSidePanel({ markerId, handleDelete }) {
+function MapSidePanel({ handleDelete }) {
     const [activeMarker, setActiveMarker] = useState({
         lat: 0,
         long: 0,

@@ -8,10 +8,6 @@ const uploadServiceData = async (data) => {
 
     // Upload each
     for (const row in data) {
-        loopCount++;
-        if (loopCount > 12)
-            return;
-
         const status = (data[row].Status === "Active") ? true : false;
 
         // Construct URL
@@ -20,35 +16,50 @@ const uploadServiceData = async (data) => {
         url.searchParams.set('q', addressConverted);
         url.searchParams.set('api_key', "662969b568730340832191sui76dab1");
 
-        const response = await fetch(url);
+        const geoCodeResponse = await fetch(url);
 
-        if (!response.ok) {
-            const message = `An error has occured: ${response.status}`;
+        if (!geoCodeResponse.ok) {
+            const message = `An error has occured: ${geoCodeResponse.status}`;
             throw new Error(message);
         }
 
-        const responseData = await response.json();
-        console.log(responseData);
+        const geoResponseData = await geoCodeResponse.json();
+        console.log("GEOCODE RESPONSE DATA", geoResponseData);
 
-        const customer = {
-            title: "Marker",
-            note: "Blank note.",
-            address: data[row].Address,
-            lat: responseData[0].lat,
-            long: responseData[0].lon,
-            firstName: data[row].FirstName,
-            lastName: data[row].LastName,
-            email: data[row].Email,
-            active: status,
+        let lat = 0;
+        let long = 0;
+
+        if (geoResponseData.length === 0) {
+            console.log("NO RESPONSE DATA");
+        } else {
+            lat = geoResponseData[0].lat;
+            long = geoResponseData[0].lon;
+
+            const customer = {
+                title: "Marker",
+                note: "Blank note.",
+                address: data[row].Address,
+                lat: lat,
+                long: long,
+                firstName: data[row].FirstName,
+                lastName: data[row].LastName,
+                email: data[row].Email,
+                active: status,
+            }
+
+            const postResponse = await fetch(`/api/markers/`, {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify(customer)
+            });
+
+            console.log(postResponse);
         }
 
-        const postResponse = await fetch(`/api/markers/`, {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json'
-            },
-            body: JSON.stringify(customer)
-        });
+        // Don't hit api rate limit 
+        await new Promise(r => setTimeout(r, 1000));
     }
 }
 
