@@ -3,7 +3,7 @@ import { useSearchParams } from 'next/navigation'
 // Icons
 import { FaTrash } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 
 function MapSidePanel({ handleDelete }) {
     const [activeMarker, setActiveMarker] = useState({
@@ -22,6 +22,8 @@ function MapSidePanel({ handleDelete }) {
     // Form variables
     const [title, setTitle] = useState("");
     const [note, setNote] = useState("");
+
+    const [editingNote, setEditingNote] = useState(false);
 
     const handleTitleChange = (e) => {
         setTitle(e.target.value);
@@ -84,9 +86,9 @@ function MapSidePanel({ handleDelete }) {
     return (
         <>
             <form onSubmit={handleSubmit} className="w-100 is-flex form is-flex-direction-column is-justify-content-space-between">
-                <div className='has-text-right	'>
-                    <div>
-                        <h2 className='title m-3'>{activeMarker.firstName}, {activeMarker.lastName}</h2>
+                <div className=''>
+                    <div className='has-text-right'>
+                        <h2 className='title m-3'>{activeMarker.firstName} {activeMarker.lastName}</h2>
                         <p className="m-3">{activeMarker.email}</p>
                         <hr className='m-3' />
                         <div className="subtitle m-3">
@@ -97,12 +99,14 @@ function MapSidePanel({ handleDelete }) {
                         </div>
                     </div>
                     <div>
-                        <div className="m-3 subtitle">
-                            Details
+                        <div className='has-text-right'>
+                            <div className="m-3 subtitle">
+                                Details
+                            </div>
+                            <p className="m-3">
+                                Status: {activeMarker.active ? <span className='has-text-success'>Active</span> : <span className='has-text-warning'>Inactive</span>}
+                            </p>
                         </div>
-                        <p className="m-3">
-                            Status: {activeMarker.active ? <span className='has-text-success'>Active</span> : <span className='has-text-warning'>Inactive</span>}
-                        </p>
                         <hr className='m-3' />
                         <h3 className='subtitle m-3'>Notes</h3>
                         <p className="m-3">
@@ -115,7 +119,7 @@ function MapSidePanel({ handleDelete }) {
                         Edit Marker
                     </p>
                     {/*                     <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
- */}                    <textarea onChange={handleNoteChange} name="note" className="m-3 textarea" placeholder={activeMarker.note}></textarea>
+ */}                    <textarea onChange={handleNoteChange} name="note" className="mb-3 mt-3   textarea" placeholder={activeMarker.note}></textarea>
                     <div>
                         <button onClick={handleDelete} className="button m-1 is-danger">
                             <span className="icon is-small">

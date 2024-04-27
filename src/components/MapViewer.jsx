@@ -54,7 +54,7 @@ export default function MapViewer(props) {
             >
                 <Popup>
                     <Link href={`/map?_id=${data._id}`}>
-                        <h2 className="">{data.address}</h2>
+                        <h2 className={data.active ? "has-text-success" : "has-text-warning"}>{data.firstName} {data.lastName}</h2>
                     </Link>
                 </Popup>
             </Marker>
