@@ -10,13 +10,6 @@ import { useEffect, useMemo, useState } from "react";
 
 
 function MapView() {
-    const { data: session, status } = useSession()
-
-    if (!session) {
-        redirect("/");
-        return (<></>);
-    }
-
     const fetchMarkers = async () => {
         console.log("fetching all markers");
         const response = await fetch('/api/markers');
@@ -62,6 +55,14 @@ function MapView() {
             // this now gets called when the component unmounts
         };
     }, []);
+
+    // Session redireect
+    const { data: session, status } = useSession()
+
+    if (!session) {
+        redirect("/");
+        return (<></>);
+    }
 
     return (
         <>

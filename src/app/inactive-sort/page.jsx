@@ -19,11 +19,6 @@ import { FiUpload } from "react-icons/fi";
 function InactiveSort() {
     const { data: session, status } = useSession()
 
-    if (!session) {
-        redirect("/");
-        return (<></>);
-    }
-
     // onchange states
     const [excelFile, setExcelFile] = useState(null);
     const [typeError, setTypeError] = useState(null);
@@ -31,6 +26,11 @@ function InactiveSort() {
 
     // submit state
     const [excelData, setExcelData] = useState(null);
+
+    if (!session) {
+        redirect("/");
+        return (<></>);
+    }
 
     // Clear file
     const clearExcelFile = () => {
