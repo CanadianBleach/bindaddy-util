@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function Navbar() {
     const { data: session, status } = useSession()
-    
+
     return (
         <>
             <nav className="navbar" role="navigation" aria-label="main navigation">
@@ -32,26 +32,25 @@ function Navbar() {
                             Github
                         </Link>
 
-                        <div className="navbar-item has-dropdown is-hoverable">
-                            <a className="navbar-link">
-                                More
-                            </a>
-                            <div className="navbar-dropdown">
-                                <Link href="../map" className="navbar-item">
-                                    Maps
-                                </Link>
-                                <Link href="../inactive-sort" className="navbar-item">
-                                    Inactive Sort
-                                </Link>
-                                <a href="../client-upload" className="navbar-item">
-                                    Client Upload
+                        {session && session.user ?
+                            <div className="navbar-item has-dropdown is-hoverable">
+                                <a className="navbar-link">
+                                    More
                                 </a>
-                                <hr className="navbar-divider"></hr>
-                                <a className="navbar-item">
-                                    -
-                                </a>
-                            </div>
-                        </div>
+                                <div className="navbar-dropdown">
+                                    <Link href="../map" className="navbar-item">
+                                        Maps
+                                    </Link>
+                                    <Link href="../inactive-sort" className="navbar-item">
+                                        Inactive Sort
+                                    </Link>
+                                    <a href="../client-upload" className="navbar-item">
+                                        Client Upload
+                                    </a>
+                                    <hr className="navbar-divider"></hr>
+                                </div>
+                            </div> : <></>
+                        }
                     </div>
 
                     <div className="navbar-end">

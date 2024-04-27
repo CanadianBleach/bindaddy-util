@@ -7,11 +7,15 @@ import { useEffect, useState } from 'react';
 
 function MapSidePanel({ handleDelete }) {
     const [activeMarker, setActiveMarker] = useState({
+        title: "Default Marker",
+        note: "This is a blank note.",
+        address: "Test Address 1234",
         lat: 0,
         long: 0,
-        note: "No Marker Selected",
-        title: "Select a Marker",
-        address: "",
+        firstName: "John",
+        lastName: "Doe",
+        email: "test@email.com",
+        active: false,
         _id: "0"
     });
 
@@ -79,9 +83,7 @@ function MapSidePanel({ handleDelete }) {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="is-flex form is-flex-direction-column is-justify-content-space-between">
-
-
+            <form onSubmit={handleSubmit} className="main-form is-flex form is-flex-direction-column is-justify-content-space-between">
                 <div className=''>
                     <div>
                         <h2 className='title m-3'>{activeMarker.firstName}, {activeMarker.lastName}</h2>
@@ -100,21 +102,18 @@ function MapSidePanel({ handleDelete }) {
                             Details
                         </div>
                         <p className="m-3">
-                            {activeMarker.active}
+                            {activeMarker.active ? <div className='has-text-success'>Active</div> : <div className='has-text-warning'>Inactive</div>}
                         </p>
-                        <p className="m-3">
-                            Id: {activeMarker._id}
-                        </p>
+                        <h3 className='subtitle m-3'>Notes</h3>
                         <p className="m-3">
                             {activeMarker.note}
                         </p>
                     </div>
                 </div>
-
-
-
                 <div className="mb-2">
-                    <hr className="m-3" />
+                    <p className="m-3">
+                        Id: {activeMarker._id}
+                    </p>
                     <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
                     <textarea onChange={handleNoteChange} name="note" className="m-3 textarea" placeholder={activeMarker.note}></textarea>
                     <div>

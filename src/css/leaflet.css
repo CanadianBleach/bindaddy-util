@@ -4,6 +4,7 @@
     z-index: 0;
 }
 
-.sidebar {
-  max-width: 25vw;
+.main-form {
+  width: 100%;
+  padding-right: 3em;
 }

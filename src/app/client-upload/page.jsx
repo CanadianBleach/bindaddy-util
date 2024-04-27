@@ -55,6 +55,14 @@ function InactiveSort() {
         }
     }
 
+    // Session redireect
+    const { data: session, status } = useSession()
+
+    if (!session) {
+        redirect("/");
+        return (<></>);
+    }
+
     // submit event
     const handleFileSubmit = (e) => {
         e.preventDefault();
