@@ -67,12 +67,10 @@ function MapView() {
     return (
         <>
             <Navbar />
-            <div className="is-flex">
-                <div className="columns">
-                    <MapViewer className="column" markers={markers} position={[35.5820, -80.8140]} zoom={13} />
-                    <MapSidePanel className="column sidebar" />
-                </div>
-            </div >
+            <div className="is-flex w-100 pl-3 pr-3">
+                <MapViewer className="" markers={markers} position={[35.5820, -80.8140]} zoom={13} />
+                <MapSidePanel className="sidebar" />
+            </div>
         </>
     )
 }

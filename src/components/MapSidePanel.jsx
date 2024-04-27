@@ -83,12 +83,12 @@ function MapSidePanel({ handleDelete }) {
 
     return (
         <>
-            <form onSubmit={handleSubmit} className="main-form is-flex form is-flex-direction-column is-justify-content-space-between">
-                <div className=''>
+            <form onSubmit={handleSubmit} className="w-100 is-flex form is-flex-direction-column is-justify-content-space-between">
+                <div className='has-text-right	'>
                     <div>
                         <h2 className='title m-3'>{activeMarker.firstName}, {activeMarker.lastName}</h2>
                         <p className="m-3">{activeMarker.email}</p>
-                        <hr className='' />
+                        <hr className='m-3' />
                         <div className="subtitle m-3">
                             {activeMarker.address}
                         </div>
@@ -96,26 +96,26 @@ function MapSidePanel({ handleDelete }) {
                             {activeMarker.lat}, {activeMarker.long}
                         </div>
                     </div>
-                    <hr className="m-3" />
                     <div>
                         <div className="m-3 subtitle">
                             Details
                         </div>
                         <p className="m-3">
-                            {activeMarker.active ? <div className='has-text-success'>Active</div> : <div className='has-text-warning'>Inactive</div>}
+                            Status: {activeMarker.active ? <span className='has-text-success'>Active</span> : <span className='has-text-warning'>Inactive</span>}
                         </p>
+                        <hr className='m-3' />
                         <h3 className='subtitle m-3'>Notes</h3>
                         <p className="m-3">
                             {activeMarker.note}
                         </p>
                     </div>
                 </div>
-                <div className="mb-2">
+                <div className="w-100 mb-2">
                     <p className="m-3">
-                        Id: {activeMarker._id}
+                        Edit Marker
                     </p>
-                    <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
-                    <textarea onChange={handleNoteChange} name="note" className="m-3 textarea" placeholder={activeMarker.note}></textarea>
+                    {/*                     <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
+ */}                    <textarea onChange={handleNoteChange} name="note" className="m-3 textarea" placeholder={activeMarker.note}></textarea>
                     <div>
                         <button onClick={handleDelete} className="button m-1 is-danger">
                             <span className="icon is-small">
