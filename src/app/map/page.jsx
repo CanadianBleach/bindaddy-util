@@ -1,13 +1,13 @@
 'use client'
 
-import MapSidePanel from "@/components/MapSidePanel";
+import MarkerSidePanel from "@/components/MarkerSidePanel";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
-
+import ToolSelect from "@/components/ToolSelect";
 
 function MapView() {
     const fetchMarkers = async () => {
@@ -22,6 +22,7 @@ function MapView() {
         const markers = await response.json();
         return markers;
     }
+
     // Wrapped as an array so that MapViewer can use the map function
     const [markers, setMarkers] = useState([
         {
@@ -68,8 +69,9 @@ function MapView() {
         <>
             <Navbar />
             <div className="is-flex w-100 pl-3 pr-3">
+                <ToolSelect />
                 <MapViewer className="" markers={markers} position={[35.5820, -80.8140]} zoom={13} />
-                <MapSidePanel className="sidebar" />
+                <MarkerSidePanel className="sidebar" />
             </div>
         </>
     )
