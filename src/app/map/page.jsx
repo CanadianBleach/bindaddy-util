@@ -3,40 +3,37 @@
 import MarkerSidePanel from "@/components/MarkerSidePanel";
 import Navbar from "@/components/Navbar";
 import { useSession } from "next-auth/react";
-import { redirect } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import { useRouter } from "next/router";
 import { useEffect, useMemo, useState } from "react";
-import ToolSelect from "@/components/ToolSelect";
+import TerritorySidePanel from "@/components/TerritorySidePanel";
+import SidePanelManager from "@/components/SidePanelManger";
 
 function MapView() {
-    const fetchMarkers = async () => {
-        console.log("fetching all markers");
-        const response = await fetch('/api/markers');
+    const fetchData = async (url) => {
+        console.log("fetching");
+        const response = await fetch(url);
 
         if (!response.ok) {
             const message = `An error has occured: ${response.status}`;
             throw new Error(message);
         }
 
-        const markers = await response.json();
-        return markers;
+        const data = await response.json();
+        return data;
     }
 
+    // Session redireect
+    const { data: session, status } = useSession();
+    const searchParams = useSearchParams();
+
+    const _id = searchParams.get('_id');
+    
     // Wrapped as an array so that MapViewer can use the map function
-    const [markers, setMarkers] = useState([
-        {
-            "_id": "66257669f077c95b005a4cfe",
-            "title": "Default Marker",
-            "address": "None",
-            "lat": 35.6034,
-            "long": -80.8726,
-            "note": "No note.",
-            "createdAt": "2024-04-21T20:26:17.368Z",
-            "updatedAt": "2024-04-22T19:04:09.534Z",
-            "__v": 0
-        },
-    ]);
+    const [markers, setMarkers] = useState([]);
+    const [territories, setTerritories] = useState([]);
+
+    const [isMarker, setIsMarker] = useState(true);
 
     const MapViewer = useMemo(() => dynamic(
         () => import('@/components/MapViewer.jsx'),
@@ -48,8 +45,11 @@ function MapView() {
 
     useEffect(() => {
         (async () => {
-            const fetchedMarkers = await fetchMarkers();
+            const fetchedMarkers = await fetchData('/api/markers');
+            const fetchedTerritories = await fetchData('api/territories');
+
             setMarkers(fetchedMarkers.markers);
+            setTerritories(fetchedTerritories.territories);
         })();
 
         return () => {
@@ -57,21 +57,12 @@ function MapView() {
         };
     }, []);
 
-    // Session redireect
-    const { data: session, status } = useSession()
-
-    if (!session) {
-        redirect("/");
-        return (<></>);
-    }
-
     return (
         <>
             <Navbar />
             <div className="is-flex w-100 pl-3 pr-3">
-                <ToolSelect />
-                <MapViewer className="" markers={markers} position={[35.5820, -80.8140]} zoom={13} />
-                <MarkerSidePanel className="sidebar" />
+                <MapViewer setIsMarker={setIsMarker} territories={territories} markers={markers} position={[35.5820, -80.8140]} zoom={13} />
+                <SidePanelManager _id={_id} isMarker={isMarker} setIsMarker={setIsMarker}/>
             </div>
         </>
     )

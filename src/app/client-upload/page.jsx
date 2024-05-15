@@ -1,8 +1,7 @@
 'use client'
 
+import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { useState } from 'react';
-import { useSession } from 'next-auth/react';
 import * as XLSX from 'xlsx';
 
 
@@ -15,6 +14,7 @@ import Navbar from '@/components/Navbar';
 
 // Icons
 import { FiUpload } from "react-icons/fi";
+import { useState } from "react";
 
 function InactiveSort() {
     // onchange states
@@ -56,12 +56,8 @@ function InactiveSort() {
     }
 
     // Session redireect
-    const { data: session, status } = useSession()
-
-    if (!session) {
-        redirect("/");
-        return (<></>);
-    }
+    const { data: session, status } = useSession();
+    console.log(session, status);
 
     // submit event
     const handleFileSubmit = (e) => {

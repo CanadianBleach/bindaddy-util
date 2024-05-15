@@ -11,9 +11,9 @@ export async function PUT(request, { params }) {
     }
 
     const { id } = params;
-    const { newNote: note, newTitle: title } = await request.json();
+    const { newNote: note } = await request.json();
     await connectToDataBase();
-    const marker = await BDMarker.findByIdAndUpdate(id, { note, title });
+    const marker = await BDMarker.findByIdAndUpdate(id, { note });
     return NextResponse.json({ message: "Marker Updated.", marker: marker }, { status: 200 });
 }
 

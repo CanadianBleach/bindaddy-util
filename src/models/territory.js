@@ -3,7 +3,10 @@ import mongoose, { Schema } from "mongoose";
 const territory = new Schema (
     {
         name: String,
-        boundingBox: Array
+        note: String,
+        boundingBox: Array,
+        pins: Array,
+        size: Number
     },
     {
         timestamps: true,

@@ -1,8 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 
-const bdMarkerSchema = new Schema (
+const bdMarkerSchema = new Schema(
     {
-        title: String,
         note: String,
         address: String,
         lat: Number,
@@ -11,7 +10,6 @@ const bdMarkerSchema = new Schema (
         lastName: String,
         email: String,
         active: Boolean,
-
     },
     {
         timestamps: true,
