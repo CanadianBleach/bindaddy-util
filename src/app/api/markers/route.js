@@ -1,4 +1,3 @@
-import { connect } from "mongoose";
 import { NextResponse } from "next/server";
 import { connectToDataBase } from '@/db/database';
 import BDMarker from '@/models/marker';
@@ -6,12 +5,12 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/route";
 
 export async function POST(request) {
-    const session = await getServerSession(authOptions);
+/*     const session = await getServerSession(authOptions);
     if (!session) {
         return NextResponse.json({ message: "Access Restricted" }, { status: 403 });
     }
-
-    const { lat, long, note, title, address, firstName, lastName, email, active } = await request.json();
+ */
+    const { lat, long, note, address, firstName, lastName, email, active } = await request.json();
     await connectToDataBase();
 
     // If existing customer
@@ -21,7 +20,7 @@ export async function POST(request) {
         // TODO: UPDATE MARKER?
     }
 
-    await BDMarker.create({ lat, long, note, title, address, firstName, lastName, email, active });
+    await BDMarker.create({ lat, long, note, address, firstName, lastName, email, active });
     return NextResponse.json({ message: "Marker Created" }, { status: 201 });
 }
 

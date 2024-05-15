@@ -2,12 +2,23 @@ import * as XLSX from 'xlsx';
 
 const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
+const checkForClient = (clients, row) => {
+    for (const c in clients) {
+        if (clients[c].email == row.Email) {
+            console.log("This client already exists.")
+            return true;
+        }
+    }
+
+    return false;
+}
+
 const uploadServiceData = async (data) => {
-
-    let loopCount = 0;
-
     // Upload each
     for (const row in data) {
+/*         if (!clients == [] && checkForClient(clients, data[row]))
+            break; */
+
         const status = (data[row].Status === "Active") ? true : false;
 
         // Construct URL

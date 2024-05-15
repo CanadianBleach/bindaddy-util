@@ -1,7 +1,7 @@
 // src/components/Map.tsx
 import "leaflet/dist/leaflet.css";
 import "../css/leaflet.css";
-import { MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import { Circle, FeatureGroup, LayerGroup, MapContainer, Marker, Popup, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
 import MarkerClusterGroup from "react-leaflet-cluster";
 
 import { Icon } from "leaflet";
@@ -18,47 +18,64 @@ Icon.Default.mergeOptions({
     shadowUrl: MarkerShadow.src,
 });
 
-/* function CreateMarker() {
+function FlyOnLoad() {
     const [position, setPosition] = useState(null)
-
     const map = useMapEvents({
-        click(e) {
-            console.log(e);
-            setPosition(e.latlng);
+        dblclick() {
+            map.locate()
+        },
+        locationfound(e) {
+            setPosition(e.latlng)
+            map.flyTo(e.latlng, 16)
         },
     })
 
     return position === null ? null : (
         <Marker position={position}>
-          <Popup>You clicked</Popup>
+            <Popup>You are here</Popup>
         </Marker>
-      )
-} */
+    )
+}
 
 export default function MapViewer(props) {
-    const { position, zoom, markers } = props;
+    const { position, zoom, markers, territories, setIsMarker } = props;
 
     let markerElem = (<></>);
+    let territoriesElem = (<></>);
 
     try {
-        if (markers == null) {
-            console.warn("Markers Null")
+        if (markers == [] || territories == []) {
+            console.warn("Markers/Territories Null")
         }
 
-
-        markerElem = markers.map((data, index) => (
+        markerElem = markers.map((data) => (
             <Marker
                 key={data._id}
                 position={[data.lat, data.long]}
                 eventHandlers={{ click: () => console.log(data._id) }} // also, you can pass your data as a parameter to your clickMarker function
             >
                 <Popup>
-                    <Link href={`/map?_id=${data._id}`}>
+                    <Link onClick={() => setIsMarker(true)} href={`/map?_id=${data._id}&isMarker=true`}>
                         <h2 className={data.active ? "has-text-success" : "has-text-warning"}>{data.firstName} {data.lastName}</h2>
                     </Link>
                 </Popup>
             </Marker>
         ));
+
+
+        territoriesElem = territories.map((data) => (
+            <FeatureGroup key={data._id} >
+                <Popup>
+                    <Link onClick={() => setIsMarker(false)} href={`/map?_id=${data._id}&isMarker=false`}>
+                        {data.name}
+                    </Link>
+                </Popup>
+                <Circle radius={data.size} center={data.boundingBox[0]}></Circle>
+            </FeatureGroup >
+        ));
+
+        console.log(territories);
+
     } catch (e) {
         console.log(e);
     }
@@ -73,6 +90,10 @@ export default function MapViewer(props) {
                 <MarkerClusterGroup chunkedLoading>
                     {markerElem}
                 </MarkerClusterGroup>
+                <LayerGroup>
+                    {territoriesElem}
+                </LayerGroup>
+                <FlyOnLoad />
             </MapContainer>
         </>
 

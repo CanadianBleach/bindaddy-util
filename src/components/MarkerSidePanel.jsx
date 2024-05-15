@@ -5,7 +5,7 @@ import { FaTrash } from "react-icons/fa6";
 import { FaCheck } from "react-icons/fa";
 import { use, useEffect, useState } from 'react';
 
-function MapSidePanel({ handleDelete }) {
+function MapSidePanel({ handleDelete, _id }) {
     const [activeMarker, setActiveMarker] = useState({
         title: "Default Marker",
         note: "This is a blank note.",
@@ -20,21 +20,11 @@ function MapSidePanel({ handleDelete }) {
     });
 
     // Form variables
-    const [title, setTitle] = useState("");
     const [note, setNote] = useState("");
-
-    const [editingNote, setEditingNote] = useState(false);
-
-    const handleTitleChange = (e) => {
-        setTitle(e.target.value);
-    };
 
     const handleNoteChange = (e) => {
         setNote(e.target.value);
     };
-
-    const searchParams = useSearchParams()
-    const _id = searchParams.get('_id');
 
     async function handleSubmit(event) {
         event.preventDefault()
@@ -59,17 +49,19 @@ function MapSidePanel({ handleDelete }) {
         });
 
         const resData = await response.json();
-
         setActiveMarker(resData.marker);
         //Refresh
         console.log("PUT RESPONSE", resData);
     }
 
     useEffect(() => {
-        (async () => {
-            if (_id === null)
-                return;
+        if (_id === null) {
+            return (
+                <></>
+            );
+        }
 
+        (async () => {
             const response = await fetch(`/api/markers/${_id}`);
 
             if (!response.ok) {
@@ -79,7 +71,10 @@ function MapSidePanel({ handleDelete }) {
 
             const marker = await response.json();
             console.log("MARKER", marker.marker);
-            setActiveMarker(marker.marker);
+
+            if (marker.marker) {
+                setActiveMarker(marker.marker);
+            }
         })();
     }, [_id]);
 
@@ -109,17 +104,16 @@ function MapSidePanel({ handleDelete }) {
                         </div>
                         <hr className='m-3' />
                         <h3 className='subtitle m-3'>Notes</h3>
-                        <p className="m-3">
+                        <pre className="m-3">
                             {activeMarker.note}
-                        </p>
+                        </pre>
                     </div>
                 </div>
                 <div className="w-100 mb-2">
                     <p className="m-3">
                         Edit Marker
                     </p>
-                    {/*                     <input onChange={handleTitleChange} name="title" className="m-3 input" placeholder={activeMarker.title} />
- */}                    <textarea onChange={handleNoteChange} name="note" className="mb-3 mt-3   textarea" placeholder={activeMarker.note}></textarea>
+                    <textarea onChange={handleNoteChange} name="note" className="mb-3 mt-3   textarea" placeholder="Enter new note..."></textarea>
                     <div>
                         <button onClick={handleDelete} className="button m-1 is-danger">
                             <span className="icon is-small">
